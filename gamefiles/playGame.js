@@ -57,29 +57,37 @@ const mainDisplayPrompt = () => {
         type: 'list',
         name: 'mainprompt',
         message: 'What would you like to do?',
-        choices: ['Train', 'Skilling','Shop', 'Bosses', 'PK']
+        choices: ['Train', 'Skilling','Shop', 'Bosses', 'PK', 'Log Out']
       }
     ])
       .then((answer) => {
         switch (answer.mainprompt) {
           case 'Train':
-            console.log('Train');
+            train();
             break;
           case 'Skilling':
-            console.log('Skilling');
+            skilling();
             break;
           case 'Shop': 
-            console.log('Shop');
+            shop();
             break;
           case 'Bosses':
-            console.log('Bosses');
+            bosses();
             break;
           case 'PK': 
-            console.log('PK')
+            pk();
             break;
-        }
+          case 'Log Out':
+            logOut();
+            break;
+        };
       });
+      return;
 };
+
+const train = () => {
+  
+}
 
 
 module.exports = playGame;
