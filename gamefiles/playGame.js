@@ -2,6 +2,7 @@ const colors = require('colors');
 const inquirer = require('inquirer');
 const mongoose = require('mongoose');
 
+const monstersDB = require('./data/monsters.json')
 const User = require('./models/User');
 
 let user;
@@ -63,6 +64,7 @@ const mainDisplayPrompt = () => {
       .then((answer) => {
         switch (answer.mainprompt) {
           case 'Train':
+            topDisplay();
             train();
             break;
           case 'Skilling':
@@ -85,8 +87,71 @@ const mainDisplayPrompt = () => {
       return;
 };
 
+const topDisplay = () => {
+  console.clear();
+  console.log('');
+  console.log('TerminalScape'.rainbow.bold);
+  console.log('')
+  console.log(`${user.username}`);
+  console.log(`Combat Level: ${user.cbtlevel}`);
+  console.log('------------------------');
+  return;
+}
+
 const train = () => {
-  
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'trainmenu',
+        message: 'What would you like to train on?',
+        choices: ['Rats', 'Goblins', 'Witches']
+      }
+    ])
+      .then((answer) => {
+        switch (answer.trainmenu) {
+          case 'Rats':
+            topDisplay();
+            trainingArea('rat');
+            break;
+          case 'Goblins':
+            topDisplay();
+            trainingArea('goblin');
+            break;
+          case 'Witches':
+            topDisplay();
+            trainingArea('witch');
+            break;
+        };
+      });
+      return;
+};
+
+const trainingArea = (monster) => {
+  const currentMonster = monstersDB[monster];
+  const {
+    name: monsterName,
+    hitpoints: monsterHp,
+    cbtlevel: monsterCbt,
+    atklevel: monsterAtk,
+    deflevel: monsterDef,
+    xp: monsterXp
+  } = currentMonster;
+
+  console.log('');
+  console.log(`Welcome to the ${monsterName} training area!`.yellow.bold);
+  console.log('')
+
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'trainingareamenu',
+        message: 'What would you like to do?',
+        choices: [`Attack ${monsterName}, Level: ${monsterCbt}`, 'Exit']
+      }
+    ])
+
 }
 
 
