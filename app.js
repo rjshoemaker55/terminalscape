@@ -1,8 +1,11 @@
 const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
 const inquirer = require('inquirer');
+const colors = require('colors');
 
-const init = require('./server');
+const User = require('./gamefiles/models/User')
+const init = require('./gamefiles/server');
+const playGame = require('./gamefiles/playGame');
 
 const start = async () => {
   await init();
@@ -25,13 +28,50 @@ const start = async () => {
 };
 
 const login = () => {
-  console.log('login')
+  console.log('');
+  console.log('TerminalScape Login'.rainbow.bold);
+  console.log('');
+  inquirer 
+    .prompt([
+      {
+        name: 'loginusername',
+        message: 'Username:'
+      },
+      {
+        name: 'loginpassword',
+        message: 'Password:'
+      }
+    ])
+      .then(async (answers) => {
+        await User.findOne(
+          { username: answers.loginusername }
+        ).then((user) => {
+
+          if (!user) {
+            console.log('User does not exist!'.bgRed.white.bold);
+            console.log("\x1b[0m");
+            return login();
+          };
+
+          if (user.password !== answers.loginpassword) {
+            console.log("\x1b[31m", 'Incorrect password!'.bgRed.white.bold);
+            console.log("\x1b[0m");
+            return login();
+          };
+
+          return playGame(user);
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      })
 }
 
-const register = () => {
-  console.log('Welcome to TerminalScape!');
+const register = async () => {
   console.log('');
-  inquirer
+  console.log('Welcome to TerminalScape!'.rainbow.bold);
+  console.log('');
+  await inquirer
     .prompt([
       {
         name: 'newusername',
@@ -42,8 +82,31 @@ const register = () => {
         message: 'Password'
       }
     ])
-      .then((answers) => {
-        console.log(answers)
+      .then(async (answers) => {
+        const { newusername, newpassword } = answers;
+
+        await User.findOne({
+          username: newusername
+        }).then((user) => {
+          if (user) {
+            console.log('User already exists!'.bgRed.white.bold);
+            return register();
+          };
+        });
+
+        const newUser = new User({
+          username: newusername,
+          password: newpassword
+        });
+
+        await newUser.save();
+
+        console.log('Account created!'.bold.white)
+        console.log('Returning to login screen...')
+
+        setTimeout(() => {
+          login();
+        }, 3000)
       });
 }
 
