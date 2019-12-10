@@ -6,7 +6,7 @@ const colors = require('colors');
 const User = require('./gamefiles/models/User');
 const init = require('./gamefiles/server');
 
-import playGame from './gamefiles/playGame';
+import { playGame } from './gamefiles/playGame.mjs';
 
 const start = async () => {
   await init();

@@ -1,7 +1,7 @@
 const colors = require('colors');
 const inquirer = require('inquirer');
 const mongoose = require('mongoose');
-const start = require('../app');
+const start = require('../app.mjs');
 const train = require('./training');
 
 console.log(`Start playGame.js: ${JSON.stringify(start)}`);
@@ -102,4 +102,4 @@ const topDisplay = () => {
   return;
 };
 
-module.export = { playGame, topDisplay };
+export { playGame, topDisplay };
