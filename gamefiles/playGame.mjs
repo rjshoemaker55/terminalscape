@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const mongoose = require('mongoose');
 const start = require('../app.mjs');
 const train = require('./training');
+const topDisplay = require('./displays/topDisplay.mjs');
 
 console.log(`Start playGame.js: ${JSON.stringify(start)}`);
 
@@ -68,7 +69,7 @@ const mainDisplayPrompt = () => {
     .then(answer => {
       switch (answer.mainprompt) {
         case 'Train':
-          topDisplay();
+          topDisplay(user);
           train(user);
           break;
         case 'Skilling':
@@ -91,15 +92,4 @@ const mainDisplayPrompt = () => {
   return;
 };
 
-const topDisplay = () => {
-  console.clear();
-  console.log('');
-  console.log('TerminalScape'.rainbow.bold);
-  console.log('');
-  console.log(`${user.username}`);
-  console.log(`Combat Level: ${user.cbtlevel}`);
-  console.log('------------------------');
-  return;
-};
-
-export { playGame, topDisplay };
+module.exports = playGame;
