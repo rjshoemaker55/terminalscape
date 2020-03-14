@@ -1,5 +1,7 @@
 const inquirer = require('inquirer');
 const topDisplay = require('./displays/topDisplay.mjs');
+const monstersDB = require('./data/monsters.json');
+const fight = require('./fight');
 
 const train = user => {
   inquirer
@@ -15,15 +17,15 @@ const train = user => {
       switch (answer.trainmenu) {
         case 'Rats':
           topDisplay(user);
-          trainingArea('rat');
+          trainingArea('rat', user);
           break;
         case 'Goblins':
           topDisplay(user);
-          trainingArea('goblin');
+          trainingArea('goblin', user);
           break;
         case 'Witches':
           topDisplay(user);
-          trainingArea('witch');
+          trainingArea('witch', user);
           break;
         case 'Exit':
           mainScreen();
@@ -33,7 +35,7 @@ const train = user => {
   return;
 };
 
-const trainingArea = monster => {
+const trainingArea = (monster, user) => {
   const currentMonster = monstersDB[monster];
   const {
     name: monsterName,
@@ -58,9 +60,10 @@ const trainingArea = monster => {
       }
     ])
     .then(answer => {
-      if (!answer.trainingareamenu.includes('Attack')) {
+      if (!answer.trainingareamenu != 'Exit') {
+        console.log('fff')
         topDisplay(user);
-        train();
+        fight(monsterName, monsterHp, monsterCbt, monsterAtk, monsterDef, user);
       }
     });
 };
