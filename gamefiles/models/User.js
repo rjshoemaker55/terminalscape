@@ -56,7 +56,12 @@ const UserSchema = new mongoose.Schema({
   inventory: [{
     itemName: String,
     quantity: Number
-  }]
+  }],
+  weapon: {
+    weaponName: String,
+    skill: String,
+    default: 'None'
+  }
 });
 
 module.exports = User = mongoose.model('user', UserSchema);
